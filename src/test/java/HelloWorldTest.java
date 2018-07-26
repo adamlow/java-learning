@@ -1,6 +1,9 @@
 import org.junit.Test;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -111,6 +114,183 @@ public class HelloWorldTest {
 
         System.out.println(backwardsGreaterThanOne(0));
         System.out.println(backwardsGreaterThanOne(2));
+    }
+
+    @Test
+    public void testArray() {
+        int[] dogAges;
+
+        dogAges = new int[5];
+
+        dogAges[0] = 2;
+        dogAges[1] = 4;
+        dogAges[2] = 6;
+
+        System.out.println(dogAges[0]);
+    }
+
+    @Test
+    public void testArrayLoops() {
+        int[] dogAges;
+
+        dogAges = new int[5];
+
+        dogAges[0] = 2;
+        dogAges[1] = 4;
+        dogAges[2] = 6;
+
+        for(int dogAge : dogAges) {
+            dogAge++;
+            System.out.println(dogAge);
+        }
+    }
+
+    @Test
+    public void testArrayLoopsTwo() {
+        int[] dogAges;
+
+        dogAges = new int[5];
+
+        dogAges[0] = 2;
+        dogAges[1] = 4;
+        dogAges[2] = 6;
+
+        for(int index = 0; index < dogAges.length; index++) {
+            dogAges[index]++;
+            System.out.println(dogAges[index]);
+        }
+
+        for(int dogAge : dogAges) {
+            System.out.println(dogAge);
+        }
+    }
+
+    @Test
+    public void testArrayCopy() {
+        int[] dogAges;
+
+        dogAges = new int[5];
+
+        dogAges[0] = 2;
+        dogAges[1] = 4;
+        dogAges[2] = 6;
+        dogAges[3] = 6;
+        dogAges[4] = 6;
+
+        int[] newDogAges = dogAges.clone();
+
+
+        for(int index = 0; index < dogAges.length; index++) {
+            System.out.println(dogAges[index]);
+            System.out.println(newDogAges[index]);
+        }
+    }
+
+    @Test
+    public void testArrayResize() {
+        int[] dogAges;
+
+        dogAges = new int[5];
+
+        dogAges[0] = 2;
+        dogAges[1] = 4;
+        dogAges[2] = 6;
+        dogAges[3] = 6;
+        dogAges[4] = 6;
+
+        int[] newDogAges = new int[10];
+
+
+        for(int index = 0; index < dogAges.length; index++) {
+            newDogAges[index] = dogAges[index];
+        }
+
+        newDogAges[5] = 10;
+        newDogAges[6] = 100;
+
+        for(int dogAge : newDogAges) {
+            System.out.println(dogAge);
+        }
+    }
+
+    @Test
+    public void testMultiDimensionalArrays() {
+        int[][] dogAges = new int[10][10];
+    }
+
+    @Test
+    public void testList() {
+        java.util.List<Integer> catAges = new ArrayList<>();
+
+        catAges.add(5);
+        catAges.add(10);
+        catAges.add(199);
+
+        for(int catAge : catAges) {
+            System.out.println(catAge);
+        }
+
+        catAges.remove(2);
+        catAges.add(1, 7);
+
+        for(int catAge : catAges) {
+            System.out.println(catAge);
+        }
+
+        System.out.println(catAges.contains(5));
+
+        catAges.set(0, 56);
+
+        System.out.println(catAges.get(0));
+
+        catAges.isEmpty();
+
+
+    }
+
+    @Test
+    public void testListIterator() {
+        java.util.List<Integer> catAges = new ArrayList<>();
+
+        catAges.add(5);
+        catAges.add(10);
+        catAges.add(199);
+
+        Iterator<Integer> catAgeIterator = catAges.iterator();
+
+        while (catAgeIterator.hasNext()) {
+            int catAge = catAgeIterator.next();
+            System.out.println(catAge);
+        }
+    }
+
+    @Test
+    public void testIteratorEfficiency() {
+        java.util.List<Integer> catAges = new ArrayList<>();
+
+        for(int count = 0; count < 10000000; count++) {
+            catAges.add(count);
+        }
+
+        Iterator<Integer> catAgeIterator = catAges.iterator();
+
+        while (catAgeIterator.hasNext()) {
+            int catAge = catAgeIterator.next();
+            System.out.println(catAge);
+        }
+    }
+
+    @Test
+    public void testLoopEfficiency() {
+        List<Integer> catAges = new ArrayList<>();
+
+        for(int count = 0; count < 10000000; count++) {
+            catAges.add(count);
+        }
+
+        for(int index = 0; index < catAges.size(); index++) {
+            System.out.println(catAges.get(index));
+        }
     }
 
     private boolean greaterThanOne(int num) {

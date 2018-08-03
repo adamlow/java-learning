@@ -1,11 +1,9 @@
 import org.junit.Test;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-
-import static org.junit.Assert.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class HelloWorldTest {
 
@@ -290,6 +288,76 @@ public class HelloWorldTest {
 
         for(int index = 0; index < catAges.size(); index++) {
             System.out.println(catAges.get(index));
+        }
+    }
+
+//    Write a method that can print out a 2D grid of variable size with the following requirements:
+//
+//            * Each spot in the grid is a random number between 0 - 9
+//            * The grid can never be completely "empty" (all 0s)
+
+    @Test
+    public void testGrid() {
+        int firstNumber = ThreadLocalRandom.current().nextInt(1, 11);
+        int secondNumber = ThreadLocalRandom.current().nextInt(1, 11);
+        int[][] newGrid = new int[firstNumber][secondNumber];
+
+        for(int i = 0; i < firstNumber; i++){
+            for(int j = 0; j < secondNumber; j++){
+                newGrid[i][j] = ThreadLocalRandom.current().nextInt(0, 10);
+            }
+        }
+
+        for (int row = 0; row < firstNumber; row++ ) {
+            for (int col = 0; col < secondNumber; col++) {
+                System.out.printf("%7d", newGrid[row][col]);
+            }
+            System.out.println();
+        }
+    }
+//
+//    Write a second method that takes three arguments:
+//            * two-dimensional Array
+//            * number to change (old)
+//            * number to change it to (new)
+//
+//    Then given the arguments, search through the array and change all values of 'old' to 'new'
+//
+//            return the new array.
+
+    public int[][] numberChange(int[][] theList, int oldNum, int newNum) {
+        for(int rows = 0; rows < theList.length; rows++){
+            for(int cols = 0; cols < theList[0].length; cols++){
+                if(theList[rows][cols] == oldNum){
+                    theList[rows][cols] = newNum;
+                }
+            }
+        }
+        return theList;
+    }
+
+    @Test
+    public void testNumberChange(){
+        int[][] theList = {{1, 2}, {2, 3}, {3, 4}, {4, 3}, {3, 2}, {2, 1}};
+        int oldNum = 2;
+        int newNum = 8;
+
+        System.out.println("Old List:");
+        for (int row = 0; row < theList.length; row++ ) {
+            for (int col = 0; col < theList[0].length; col++) {
+                System.out.printf("%7d", theList[row][col]);
+            }
+            System.out.println();
+        }
+
+        System.out.println("New List:");
+        int [][] newList = numberChange(theList, oldNum, newNum);
+
+        for (int row = 0; row < newList.length; row++ ) {
+            for (int col = 0; col < newList[0].length; col++) {
+                System.out.printf("%7d", newList[row][col]);
+            }
+            System.out.println();
         }
     }
 

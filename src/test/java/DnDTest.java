@@ -51,6 +51,13 @@ public class DnDTest {
         private int attackDiceType;
         private int numberOfAttackDice;
 
+
+        public BaseCharacter() {
+            armorClass = 15;
+            attackDiceType = 4;
+            numberOfAttackDice = 2;
+        }
+
         public String getName() {
             return name;
         }
@@ -229,6 +236,29 @@ public class DnDTest {
         public void setNumberOfAttackDice(int numberOfAttackDice) {
             this.numberOfAttackDice = numberOfAttackDice;
         }
+
+        public BaseCharacter(String name, String race, String classType, String alignment, int strength, int dexterity,
+                             int constitution, int intelligence, int wisdom, int charisma, int proficiencyBonus,
+                             int walkingSpeed, int hitPoints, int initiativeBonus, int armorClass, int attackDiceType,
+                             int numberOfAttackDice) {
+            this.name = name;
+            this.race = race;
+            this.classType = classType;
+            this.alignment = alignment;
+            this.strength = strength;
+            this.dexterity = dexterity;
+            this.constitution = constitution;
+            this.intelligence = intelligence;
+            this.wisdom = wisdom;
+            this.charisma = charisma;
+            this.proficiencyBonus = proficiencyBonus;
+            this.walkingSpeed = walkingSpeed;
+            this.hitPoints = hitPoints;
+            this.initiativeBonus = initiativeBonus;
+            this.armorClass = armorClass;
+            this.attackDiceType = attackDiceType;
+            this.numberOfAttackDice = numberOfAttackDice;
+        }
     }
 
     public int attackToHit(int hitModifier) {
@@ -263,7 +293,7 @@ public class DnDTest {
     //    Fighter - Methods modified by Strength modifier
     //    Rogue - Methods modified by Dexterity modifier
 
-    protected void clericCharacter() {
+    public void clericCharacter() {
         BaseCharacter cleric = new BaseCharacter();
         cleric.name = "Alinda Huntinghawk";
         cleric.race = "Elf";
@@ -282,7 +312,7 @@ public class DnDTest {
         cleric.numberOfAttackDice = 3;
     }
 
-    protected void fighterCharacter() {
+    public void fighterCharacter() {
         BaseCharacter fighter = new BaseCharacter();
         fighter.name = "Adokul the Fighter";
         fighter.race = "Human";
@@ -301,7 +331,7 @@ public class DnDTest {
         fighter.numberOfAttackDice = 3;
     }
 
-    protected void rogueCharacter() {
+    public void rogueCharacter() {
         BaseCharacter rogue = new BaseCharacter();
         rogue.name = "Dardiana Milltall";
         rogue.race = "Gnome";

@@ -1,7 +1,5 @@
 import org.junit.Test;
 
-import java.awt.*;
-
 public class ClassesTest {
 
 

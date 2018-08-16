@@ -32,11 +32,74 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class DnDTest {
 
-    public class BaseCharacter {
+    public interface DiceRoller {
+        public int rollDice(int diceNum, int diceFace);
+    }
+
+    public interface Inventory {
+        public int getInventory();
+    }
+
+    public class DiceRollerClass {
+        private int diceNum;
+        private int diceFace;
+
+        public DiceRollerClass(int diceNum, int diceFace) {
+            this.diceNum = diceNum;
+            this.diceFace = diceFace;
+        }
+
+        public int rollDice() {
+            return diceNum * diceFace;
+        }
+    }
+
+    public static int rollDice(int numDice, int diceFace) {
+        return numDice * diceFace;
+    }
+
+    //Basic enum, a series of constants
+    public enum DamageType {
+        BLUDGEONING, PIERCING, SLASHING, MAGIC;
+    }
+
+    //Longer enum, still just a series of constants but we will use the names of the enums themselves
+    public enum DnDRaces {
+        AASIMAR, DRAGONBORN, DWARF, ELF, GNOME, HALF_ELF, HALFLING, HALF_ORC, HUMAN, TIEFLING;
+    }
+
+    public enum DnDClasses {
+        FIGHTER, ROGUE, CLERIC
+    }
+
+    //More complicated enum, instead of using the names we assign a string value to each & then you can print that out instead of the name
+    //Now if you use .toString() it will print the display text
+    public enum Alignment {
+        LG("Lawful Good"), G("Good"), CG("Chaotic Good"),
+        LN("Lawful Neutral"), N("Neutral"), CN("Chaotic Neutral"),
+        LE("Lawful Evil"), E("Evil"), CE("Chaotic Evil");
+
+        private final String displayText;
+
+        Alignment(final String displayText) {
+            this.displayText = displayText;
+        }
+
+        @Override
+        public String toString() {
+            return displayText;
+        }
+    }
+
+    public class BaseCharacter implements DiceRoller, Inventory {
+        public static final String DND_EDITION = "5th Edition";
+
         private String name;
-        private String race;
-        private String classType;
-        private String alignment;
+        private DnDRaces race;
+        private DnDClasses classType;
+        private Alignment alignment;
+        private DiceRollerClass diceRoller;
+        private DamageType attackDamageType;//Enum variable declaration
         private int strength;
         private int dexterity;
         private int constitution;
@@ -51,13 +114,6 @@ public class DnDTest {
         private int attackDiceType;
         private int numberOfAttackDice;
 
-
-        public BaseCharacter() {
-            armorClass = 15;
-            attackDiceType = 4;
-            numberOfAttackDice = 2;
-        }
-
         public String getName() {
             return name;
         }
@@ -66,46 +122,29 @@ public class DnDTest {
             this.name = name;
         }
 
+        //This getter function returns the name of the race. This is done by getting the name from the enum value.
         public String getRace() {
-            return race;
+            return race.name();
         }
 
-        public void setRace(String race) {
-            final String[] validRaces = new String[] {"Aasimar", "Dragonborn", "Dwarf", "Elf", "Gnome", "Half-Elf",
-                    "Halfling", "Half-Orc", "Human", "Tiefling"};
-            if(Arrays.asList(validRaces).contains(race)) {
-                this.race = race;
-            } else {
-                this.race = "Unknown";
-            }
+        public void setRace(DnDRaces race) {
+            this.race = race;
         }
 
-        public String getClassType() {
-            return classType;
+        public String getClassName() {
+            return classType.name();
         }
 
-        public void setClassType(String classType) {
-            final String[] validClasses = new String[] {"Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk",
-                    "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"};
-            if(Arrays.asList(validClasses).contains(classType)){
-                this.classType = classType;
-            } else {
-                this.classType = "Unknown";
-            }
+        public void setClassType(DnDClasses classType) {
+            this.classType = classType;
         }
 
         public String getAlignment() {
-            return alignment;
+            return alignment.toString();
         }
 
-        public void setAlignment(String alignment) {
-            final String[] validAlignments = new String[] {"Lawful Good", "Neutral Good", "Chaotic Good",
-                    "Lawful Neutral", "Neutral", "Chaotic Neutral", "Lawful Evil", "Neutral Evil", "Chaotic Evil"};
-            if(Arrays.asList(validAlignments).contains(alignment)) {
-                this.alignment = alignment;
-            } else {
-                this.alignment = "Unknown";
-            }
+        public void setAlignment(Alignment alignment) {
+            this.alignment = alignment;
         }
 
         public int getStrength() {
@@ -237,7 +276,25 @@ public class DnDTest {
             this.numberOfAttackDice = numberOfAttackDice;
         }
 
-        public BaseCharacter(String name, String race, String classType, String alignment, int strength, int dexterity,
+        public DamageType getAttackDamageType() {
+            return attackDamageType;
+        }
+
+        public void setAttackDamageType(DamageType attackDamageType) {
+            this.attackDamageType = attackDamageType;
+        }
+
+        public BaseCharacter() {
+            armorClass = 15;
+            attackDiceType = 4;
+            numberOfAttackDice = 2;
+            diceRoller = new DiceRollerClass(numberOfAttackDice, attackDiceType);
+
+            setAttackDamageType(DamageType.BLUDGEONING);//You can only set the damage type to one of the values in the enum
+//            attackDamageType = "FIRE";//THIS wouldn't work because damage type isn't a string it's an enum
+        }
+
+        public BaseCharacter(String name, DnDRaces race, DnDClasses classType, Alignment alignment, int strength, int dexterity,
                              int constitution, int intelligence, int wisdom, int charisma, int proficiencyBonus,
                              int walkingSpeed, int hitPoints, int initiativeBonus, int armorClass, int attackDiceType,
                              int numberOfAttackDice) {
@@ -258,6 +315,32 @@ public class DnDTest {
             this.armorClass = armorClass;
             this.attackDiceType = attackDiceType;
             this.numberOfAttackDice = numberOfAttackDice;
+        }
+
+        @Override
+        public int rollDice(int diceNum, int diceFace) {
+            return diceRoller.rollDice();
+        }
+
+        @Override
+        public int getInventory() {
+            return rollDice(numberOfAttackDice, attackDiceType);
+        }
+
+        //I don't know if we've covered switch statements... If not here you go!
+        public String getAttackAdjective() {
+            switch (attackDamageType) {
+                case MAGIC:
+                    return "Magical";
+                case PIERCING:
+                    return "Stabbing";
+                case SLASHING:
+                    return "Slicing";
+                case BLUDGEONING:
+                    return "Crushing";
+                default:
+                    return "Unknown!";
+            }
         }
     }
 
@@ -296,9 +379,9 @@ public class DnDTest {
     public void clericCharacter() {
         BaseCharacter cleric = new BaseCharacter();
         cleric.name = "Alinda Huntinghawk";
-        cleric.race = "Elf";
-        cleric.classType = "Cleric";
-        cleric.alignment = "Lawful Good";
+        cleric.race = DnDRaces.ELF;
+        cleric.classType = DnDClasses.CLERIC;
+        cleric.alignment = Alignment.LG;
         cleric.strength = 10;
         cleric.dexterity = 8;
         cleric.constitution = 13;
@@ -315,9 +398,9 @@ public class DnDTest {
     public void fighterCharacter() {
         BaseCharacter fighter = new BaseCharacter();
         fighter.name = "Adokul the Fighter";
-        fighter.race = "Human";
-        fighter.classType = "Fighter";
-        fighter.alignment = "Chaotic Good";
+        fighter.race = DnDRaces.valueOf("HUMAN");//This will take the String "HUMAN" and convert it to the HUMAN enum value
+        fighter.classType = DnDClasses.values()[0];//Enums are actually an array of values, you can use this to make assignments using array accessors
+        fighter.alignment = Alignment.CG;
         fighter.strength = 15;
         fighter.dexterity = 14;
         fighter.constitution = 13;
@@ -334,9 +417,9 @@ public class DnDTest {
     public void rogueCharacter() {
         BaseCharacter rogue = new BaseCharacter();
         rogue.name = "Dardiana Milltall";
-        rogue.race = "Gnome";
-        rogue.classType = "Rogue";
-        rogue.alignment = "Chaotic Neutral";
+        rogue.race = DnDRaces.GNOME;
+        rogue.classType = DnDClasses.ROGUE;
+        rogue.alignment = Alignment.CN;
         rogue.strength = 8;
         rogue.dexterity = 15;
         rogue.constitution = 13;

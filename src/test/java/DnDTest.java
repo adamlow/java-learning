@@ -27,6 +27,8 @@
 //
 //*BONUS* Give each of your extended classes a custom catch phrase when they die
 
+import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -50,13 +52,7 @@ public class DnDTest {
         private int armorClass;
         private int attackDiceType;
         private int numberOfAttackDice;
-
-
-        public BaseCharacter() {
-            armorClass = 15;
-            attackDiceType = 4;
-            numberOfAttackDice = 2;
-        }
+        private String deathCatchPhrases;
 
         public String getName() {
             return name;
@@ -237,10 +233,18 @@ public class DnDTest {
             this.numberOfAttackDice = numberOfAttackDice;
         }
 
+        public String getDeathCatchPhrases() {
+            return deathCatchPhrases;
+        }
+
+        public void setDeathCatchPhrases(String deathCatchPhrases) {
+            this.deathCatchPhrases = deathCatchPhrases;
+        }
+
         public BaseCharacter(String name, String race, String classType, String alignment, int strength, int dexterity,
                              int constitution, int intelligence, int wisdom, int charisma, int proficiencyBonus,
                              int walkingSpeed, int hitPoints, int initiativeBonus, int armorClass, int attackDiceType,
-                             int numberOfAttackDice) {
+                             int numberOfAttackDice, String deathCatchPhrases) {
             this.name = name;
             this.race = race;
             this.classType = classType;
@@ -258,34 +262,35 @@ public class DnDTest {
             this.armorClass = armorClass;
             this.attackDiceType = attackDiceType;
             this.numberOfAttackDice = numberOfAttackDice;
+            this.deathCatchPhrases = deathCatchPhrases;
         }
-    }
 
-    public int attackToHit(int hitModifier) {
-        // Returning the sum of a random number between 1 and 20 and the hit modifier sent in.
-        int hitRoll = ThreadLocalRandom.current().nextInt(1, 20) + hitModifier;
-        return hitRoll;
-    }
-
-    public int attackDamage(int diceType, int numberOfDice) {
-        // Returning the total number of damage calculated from the dice type (d4, d12, etc.) and the number of dice needed.
-        int damageRoll = 0;
-        for(int dice = 1; dice <= numberOfDice; dice++){
-            damageRoll += ThreadLocalRandom.current().nextInt(1, diceType);
+        public int attackToHit(int hitModifier) {
+            // Returning the sum of a random number between 1 and 20 and the hit modifier sent in.
+            int hitRoll = ThreadLocalRandom.current().nextInt(1, 20) + hitModifier;
+            return hitRoll;
         }
-        return damageRoll;
-    }
 
-    public int takeDamage(int currentHitPoint, int damage) {
-        // Returning the character's hit points based on the current hit points sent in and the amount of damage to take.
-        currentHitPoint -= damage;
-        return currentHitPoint;
-    }
+        public int attackDamage(int diceType, int numberOfDice) {
+            // Returning the total number of damage calculated from the dice type (d4, d12, etc.) and the number of dice needed.
+            int damageRoll = 0;
+            for(int dice = 1; dice <= numberOfDice; dice++){
+                damageRoll += ThreadLocalRandom.current().nextInt(1, diceType);
+            }
+            return damageRoll;
+        }
 
-    public int statModifier(int statTotal) {
-        // Returning the stat modifier based on the stat (Strength, Dexterity, etc.) set in.
-        int statModifierNumber = (statTotal - 10)/2;
-        return statModifierNumber;
+        public int takeDamage(int currentHitPoint, int damage) {
+            // Returning the character's hit points based on the current hit points sent in and the amount of damage to take.
+            currentHitPoint -= damage;
+            return currentHitPoint;
+        }
+
+        public int statModifier(int statTotal) {
+            // Returning the stat modifier based on the stat (Strength, Dexterity, etc.) set in.
+            int statModifierNumber = (statTotal - 10)/2;
+            return statModifierNumber;
+        }
     }
 
     //Extend the base class & change methods 1 & 2 to be modified by stats:
@@ -293,60 +298,74 @@ public class DnDTest {
     //    Fighter - Methods modified by Strength modifier
     //    Rogue - Methods modified by Dexterity modifier
 
-    public void clericCharacter() {
-        BaseCharacter cleric = new BaseCharacter();
-        cleric.name = "Alinda Huntinghawk";
-        cleric.race = "Elf";
-        cleric.classType = "Cleric";
-        cleric.alignment = "Lawful Good";
-        cleric.strength = 10;
-        cleric.dexterity = 8;
-        cleric.constitution = 13;
-        cleric.intelligence = 14;
-        cleric.wisdom = 15;
-        cleric.charisma = 12;
-        cleric.proficiencyBonus = 2;
-        cleric.walkingSpeed = 30;
-        cleric.armorClass = 15;
-        cleric.attackDiceType = 4;
-        cleric.numberOfAttackDice = 3;
-    }
+    BaseCharacter clericCharacter = new BaseCharacter("Alinda Huntinghawk", "Elf", "Cleric",
+            "Lawful Good", 10, 8, 13, 14, 15, 12,
+            2, 30, 30, -1, 15, 4,
+            3, "We'll meet again. In this life or the next!");
 
-    public void fighterCharacter() {
-        BaseCharacter fighter = new BaseCharacter();
-        fighter.name = "Adokul the Fighter";
-        fighter.race = "Human";
-        fighter.classType = "Fighter";
-        fighter.alignment = "Chaotic Good";
-        fighter.strength = 15;
-        fighter.dexterity = 14;
-        fighter.constitution = 13;
-        fighter.intelligence = 8;
-        fighter.wisdom = 10;
-        fighter.charisma = 12;
-        fighter.proficiencyBonus = 2;
-        fighter.walkingSpeed = 35;
-        fighter.armorClass = 17;
-        fighter.attackDiceType = 6;
-        fighter.numberOfAttackDice = 3;
-    }
+    BaseCharacter fighterCharacter = new BaseCharacter("Adokul the Fighter", "Human", "Fighter",
+            "Chaotic Good", 15, 14, 13, 8, 10, 12,
+            2, 35, 32, 2, 17, 6,
+            3, "I have shamed my family by being bested by the likes of you!");
 
-    public void rogueCharacter() {
-        BaseCharacter rogue = new BaseCharacter();
-        rogue.name = "Dardiana Milltall";
-        rogue.race = "Gnome";
-        rogue.classType = "Rogue";
-        rogue.alignment = "Chaotic Neutral";
-        rogue.strength = 8;
-        rogue.dexterity = 15;
-        rogue.constitution = 13;
-        rogue.intelligence = 14;
-        rogue.wisdom = 10;
-        rogue.charisma = 12;
-        rogue.proficiencyBonus = 2;
-        rogue.walkingSpeed = 40;
-        rogue.armorClass = 16;
-        rogue.attackDiceType = 6;
-        rogue.numberOfAttackDice = 2;
+    BaseCharacter rogueCharacter = new BaseCharacter("Dardiana Milltall", "Gnome", "Rogue",
+            "Chaotic Neutral", 8, 15, 13, 14, 10, 12,
+            2, 40, 28, 2, 16, 6,
+            2, "Don't be so sure that I won't be lurking in the shadows.");
+
+    @Test
+    public void battleCharacters() {
+        int clericInitiative = clericCharacter.attackToHit(clericCharacter.getInitiativeBonus());
+        int fighterInitiative = fighterCharacter.attackToHit(fighterCharacter.getInitiativeBonus());
+        System.out.println("The cleric's starting HP is: " + clericCharacter.getHitPoints());
+        System.out.println("The fighter's starting HP is: " + fighterCharacter.getHitPoints());
+
+        while (clericCharacter.getHitPoints() > 0 && fighterCharacter.getHitPoints() > 0) {
+            if (clericInitiative > fighterInitiative) {
+                int clericAttackToHit = clericCharacter.attackToHit(clericCharacter.getProficiencyBonus());
+                if (clericAttackToHit >= fighterCharacter.getArmorClass()) {
+                    System.out.println("The Cleric is attacking the Fighter.");
+                    int clericAttackDamage = clericCharacter.attackDamage(clericCharacter.getAttackDiceType(), clericCharacter.getNumberOfAttackDice());
+                    fighterCharacter.setHitPoints(fighterCharacter.takeDamage(fighterCharacter.getHitPoints(), clericAttackDamage));
+                    System.out.println("The fighter's HP is now:" + fighterCharacter.getHitPoints());
+                    if (fighterCharacter.getHitPoints() <= 0){
+                        System.out.println("In his final breath, " + fighterCharacter.getName() + " cries out: " + fighterCharacter.getDeathCatchPhrases());
+                    }
+                }
+
+                int fighterAttackToHit = fighterCharacter.attackToHit(fighterCharacter.getProficiencyBonus());
+                if (fighterAttackToHit >= clericCharacter.getArmorClass() && fighterCharacter.getHitPoints() > 0) {
+                    System.out.println("The Fighter is attacking the Cleric.");
+                    int fighterAttackDamage = fighterCharacter.attackDamage(fighterCharacter.getAttackDiceType(), fighterCharacter.getNumberOfAttackDice());
+                    clericCharacter.setHitPoints(clericCharacter.takeDamage(clericCharacter.getHitPoints(), fighterAttackDamage));
+                    System.out.println("The cleric's HP is now:" + clericCharacter.getHitPoints());
+                    if (clericCharacter.getHitPoints() <= 0){
+                        System.out.println("In her final breath, " + clericCharacter.getName() + " whispers: " + clericCharacter.getDeathCatchPhrases());
+                    }
+                }
+            } else {
+                int fighterAttackToHit = fighterCharacter.attackToHit(fighterCharacter.getProficiencyBonus());
+                if (fighterAttackToHit >= clericCharacter.getArmorClass()) {
+                    System.out.println("The Fighter is attacking the Cleric.");
+                    int fighterAttackDamage = fighterCharacter.attackDamage(fighterCharacter.getAttackDiceType(), fighterCharacter.getNumberOfAttackDice());
+                    clericCharacter.setHitPoints(clericCharacter.takeDamage(clericCharacter.getHitPoints(), fighterAttackDamage));
+                    System.out.println("The cleric's HP is now:" + clericCharacter.getHitPoints());
+                    if (clericCharacter.getHitPoints() <= 0){
+                        System.out.println("In her final breath, " + clericCharacter.getName() + " whispers: " + clericCharacter.getDeathCatchPhrases());
+                    }
+                }
+
+                int clericAttackToHit = clericCharacter.attackToHit(clericCharacter.getProficiencyBonus());
+                if (clericAttackToHit >= fighterCharacter.getArmorClass() && clericCharacter.getHitPoints() > 0) {
+                    System.out.println("The Cleric is attacking the Fighter.");
+                    int clericAttackDamage = clericCharacter.attackDamage(clericCharacter.getAttackDiceType(), clericCharacter.getNumberOfAttackDice());
+                    fighterCharacter.setHitPoints(fighterCharacter.takeDamage(fighterCharacter.getHitPoints(), clericAttackDamage));
+                    System.out.println("The fighter's HP is now:" + fighterCharacter.getHitPoints());
+                    if (fighterCharacter.getHitPoints() <= 0){
+                        System.out.println("In his final breath, " + fighterCharacter.getName() + " cries out: " + fighterCharacter.getDeathCatchPhrases());
+                    }
+                }
+            }
+        }
     }
 }

@@ -322,49 +322,33 @@ public class DnDTest {
 
         while (clericCharacter.getHitPoints() > 0 && fighterCharacter.getHitPoints() > 0) {
             if (clericInitiative > fighterInitiative) {
-                int clericAttackToHit = clericCharacter.attackToHit(clericCharacter.getProficiencyBonus());
-                if (clericAttackToHit >= fighterCharacter.getArmorClass()) {
-                    System.out.println("The Cleric is attacking the Fighter.");
-                    int clericAttackDamage = clericCharacter.attackDamage(clericCharacter.getAttackDiceType(), clericCharacter.getNumberOfAttackDice());
-                    fighterCharacter.setHitPoints(fighterCharacter.takeDamage(fighterCharacter.getHitPoints(), clericAttackDamage));
-                    System.out.println("The fighter's HP is now:" + fighterCharacter.getHitPoints());
-                    if (fighterCharacter.getHitPoints() <= 0){
-                        System.out.println("In his final breath, " + fighterCharacter.getName() + " cries out: " + fighterCharacter.getDeathCatchPhrases());
-                    }
-                }
-
-                int fighterAttackToHit = fighterCharacter.attackToHit(fighterCharacter.getProficiencyBonus());
-                if (fighterAttackToHit >= clericCharacter.getArmorClass() && fighterCharacter.getHitPoints() > 0) {
-                    System.out.println("The Fighter is attacking the Cleric.");
-                    int fighterAttackDamage = fighterCharacter.attackDamage(fighterCharacter.getAttackDiceType(), fighterCharacter.getNumberOfAttackDice());
-                    clericCharacter.setHitPoints(clericCharacter.takeDamage(clericCharacter.getHitPoints(), fighterAttackDamage));
-                    System.out.println("The cleric's HP is now:" + clericCharacter.getHitPoints());
-                    if (clericCharacter.getHitPoints() <= 0){
-                        System.out.println("In her final breath, " + clericCharacter.getName() + " whispers: " + clericCharacter.getDeathCatchPhrases());
-                    }
-                }
+                handleRoundOfBattle(clericCharacter, fighterCharacter);
             } else {
-                int fighterAttackToHit = fighterCharacter.attackToHit(fighterCharacter.getProficiencyBonus());
-                if (fighterAttackToHit >= clericCharacter.getArmorClass()) {
-                    System.out.println("The Fighter is attacking the Cleric.");
-                    int fighterAttackDamage = fighterCharacter.attackDamage(fighterCharacter.getAttackDiceType(), fighterCharacter.getNumberOfAttackDice());
-                    clericCharacter.setHitPoints(clericCharacter.takeDamage(clericCharacter.getHitPoints(), fighterAttackDamage));
-                    System.out.println("The cleric's HP is now:" + clericCharacter.getHitPoints());
-                    if (clericCharacter.getHitPoints() <= 0){
-                        System.out.println("In her final breath, " + clericCharacter.getName() + " whispers: " + clericCharacter.getDeathCatchPhrases());
-                    }
-                }
+                handleRoundOfBattle(fighterCharacter, clericCharacter);
+            }
+        }
+    }
 
-                int clericAttackToHit = clericCharacter.attackToHit(clericCharacter.getProficiencyBonus());
-                if (clericAttackToHit >= fighterCharacter.getArmorClass() && clericCharacter.getHitPoints() > 0) {
-                    System.out.println("The Cleric is attacking the Fighter.");
-                    int clericAttackDamage = clericCharacter.attackDamage(clericCharacter.getAttackDiceType(), clericCharacter.getNumberOfAttackDice());
-                    fighterCharacter.setHitPoints(fighterCharacter.takeDamage(fighterCharacter.getHitPoints(), clericAttackDamage));
-                    System.out.println("The fighter's HP is now:" + fighterCharacter.getHitPoints());
-                    if (fighterCharacter.getHitPoints() <= 0){
-                        System.out.println("In his final breath, " + fighterCharacter.getName() + " cries out: " + fighterCharacter.getDeathCatchPhrases());
-                    }
-                }
+    private void handleRoundOfBattle(BaseCharacter firstCharacter, BaseCharacter secondCharacter) {
+        int clericAttackToHit = firstCharacter.attackToHit(firstCharacter.getProficiencyBonus());
+        if (clericAttackToHit >= secondCharacter.getArmorClass()) {
+            System.out.println("The Cleric is attacking the Fighter.");
+            int clericAttackDamage = firstCharacter.attackDamage(firstCharacter.getAttackDiceType(), firstCharacter.getNumberOfAttackDice());
+            secondCharacter.setHitPoints(secondCharacter.takeDamage(secondCharacter.getHitPoints(), clericAttackDamage));
+            System.out.println("The fighter's HP is now:" + secondCharacter.getHitPoints());
+            if (secondCharacter.getHitPoints() <= 0){
+                System.out.println("In his final breath, " + secondCharacter.getName() + " cries out: " + secondCharacter.getDeathCatchPhrases());
+            }
+        }
+
+        int fighterAttackToHit = secondCharacter.attackToHit(secondCharacter.getProficiencyBonus());
+        if (fighterAttackToHit >= firstCharacter.getArmorClass() && secondCharacter.getHitPoints() > 0) {
+            System.out.println("The Fighter is attacking the Cleric.");
+            int fighterAttackDamage = secondCharacter.attackDamage(secondCharacter.getAttackDiceType(), secondCharacter.getNumberOfAttackDice());
+            firstCharacter.setHitPoints(firstCharacter.takeDamage(firstCharacter.getHitPoints(), fighterAttackDamage));
+            System.out.println("The cleric's HP is now:" + firstCharacter.getHitPoints());
+            if (firstCharacter.getHitPoints() <= 0){
+                System.out.println("In her final breath, " + firstCharacter.getName() + " whispers: " + firstCharacter.getDeathCatchPhrases());
             }
         }
     }
